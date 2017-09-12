@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class CoursGateway {
 
     private final CoursReader coursReader;
-
+    private final CoursWriter coursWriter;
+    
     @Autowired
-    public CoursGateway(CoursReader coursReader) {
+    public CoursGateway(CoursReader coursReader, CoursWriter coursWriter) {
         this.coursReader = coursReader;
+        this.coursWriter = coursWriter;
     }
 
     @HystrixCommand(fallbackMethod = "fallback")
@@ -42,4 +44,14 @@ public class CoursGateway {
         return new Resources<>(listeCours);
     }
 
+    @PostMapping
+    public void write(@RequestBody Cours cours) {
+      this.coursWriter.write(cours);
+    }
+
 }
+
+
+
+
+
